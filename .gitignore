@@ -1,0 +1,42 @@
+# Logs
+/client/logs
+/client/*.log
+/client/npm-debug.log*
+/client/yarn-debug.log*
+/client/yarn-error.log*
+/client/pnpm-debug.log*
+/client/lerna-debug.log*
+
+/client/node_modules
+/client/dist
+/client/dist-ssr
+/client/*.local
+
+# Editor directories and files
+/client/.vscode/*
+/client/!.vscode/extensions.json
+/client/.idea
+/client/.DS_Store
+/client/*.suo
+/client/*.ntvs*
+/client/*.njsproj
+/client/*.sln
+/client/*.sw?
+
+/server/.idea
+/server/*.iws
+/server/*.iml
+/server/*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+/server/.vscode/
