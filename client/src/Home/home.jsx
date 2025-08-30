@@ -2,7 +2,7 @@ import react from "react";
 import BackgroundImage from "../assets/background.png";
 import Header from "../Components/Header";
 import Categories from "../Components/Categories";
-
+import Carousel from "../Components/Carousel";
 const getBackgroundStyle = () => ({
   background: `url(${BackgroundImage}) center center / cover no-repeat`,
 });
@@ -19,7 +19,9 @@ export default function Home() {
           <aside className="w-[200px] h-[400px] bg-gray-200 border-gray-200 rounded">
             <Categories/>
           </aside>
-          <div className="w-[700px] h-[400px] border-none rounded bg-gray-800"></div>
+          <div className="w-[700px] h-[400px] border-none rounded bg-gray-800">
+           <Carousel/> 
+          </div>
           <div className="w-[250px] h-[400px]">
             <div className="w-full h-[190px] border-none rounded-2xl bg-green-500"></div>
             <div className="w-full h-[190px] border-none rounded-2xl bg-red-500 mt-5"></div>

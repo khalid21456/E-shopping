@@ -16,13 +16,13 @@ export default function Header() {
     <React.Fragment>
       <div className="bg-gray-500 h-16"></div>
       <div className="bg-gray-200 h-9 flex justify-around">
-        <label className="text-orange-500 pt-1 text-[15px] font-bold">
+        <label className="text-orange-500 pt-2 hover:underline hover:text-blue-500 cursor-pointer text-[13px] font-bold" style={{ fontFamily: "Poppins" }}>
           Vender sur e-shop
         </label>
         <img
           src={logo}
           width="70px"
-          style={{ marginRight: "100px", cursor: "pointer" }}
+          style={{ marginRight: "100px"}}
           alt="logo"
         />
         <div></div>

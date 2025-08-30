@@ -1,58 +1,117 @@
-import React from "react";
+import React, { useState } from "react";
 import panier from "../assets/panier.png";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import logo from "../assets/logo.png"
+import logo from "../assets/logo.png";
 import { useNavigate } from "react-router-dom";
+import LinearProgress from "@mui/material/LinearProgress";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
 
 import "../index.css";
 const Login = () => {
+  const navigate = useNavigate();
+  const [showProgressionBar, setShowProgressionBar] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const handleConnect = async () => {
+    setShowProgressionBar(true);
+  };
 
-    const navigate = useNavigate()
-
-    return (
+  return (
     <div className="min-h-screen bg-gray-100" style={{ fontFamily: "Poppins" }}>
       <div className="flex justify-center pt-12">
         <img src={panier} width="100px" alt="panier" />
       </div>
+      {showProgressionBar && (
+        <div id="progression_bar" className="flex justify-center mt-5">
+          <Box sx={{ width: "35%" }}>
+            <LinearProgress
+              sx={{
+                "& .MuiLinearProgress-bar": {
+                  backgroundColor: "#f54a00", // bar color
+                },
+                backgroundColor: "#ffe0cc", // track color (optional)
+              }}
+            />
+          </Box>
+        </div>
+      )}
       <div className="flex justify-center p-5">
         <label className="text-[20px] font-bold pl-5">
           Bienvenue chez e-shop
         </label>
       </div>
+
       <div className="flex justify-center">
         <label className="w-1/3 text-center text-gray-700">
           Saisissez votre adresse e-mail ou numéro de téléphone pour vous
-          connecter ou créer un compte E-shop
+          connecter au votre compte e-shop
         </label>
       </div>
       <div className="flex justify-center mt-5">
-        <Box
-          component="form"
-          sx={{ "& > :not(style)": { m: 1, width: "54ch" } }}
-          noValidate
-          autoComplete="off"
-        >
-          <TextField
-            sx={{
-              "& label.Mui-focused": {
-                color: "#f54a00",
-              },
-              "& .MuiOutlinedInput-root": {
-                "&:hover fieldset": {
-                  borderColor: "gray",
+        <div>
+          <Box
+            component="form"
+            sx={{ "& > :not(style)": { m: 1, width: "54ch" } }}
+            noValidate
+            autoComplete="off"
+          >
+            <TextField
+              sx={{
+                "& label.Mui-focused": {
+                  color: "#f54a00",
                 },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#f54a00",
+                "& .MuiOutlinedInput-root": {
+                  "&:hover fieldset": {
+                    borderColor: "gray",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#f54a00",
+                  },
                 },
-              },
-            }}
-            id="outlined-basic"
-            label="Adresse email ou numéro de téléphone*"
-            variant="outlined"
-          />
-        </Box>
+              }}
+              id="outlined-basic"
+              label="Adresse email ou numéro de téléphone*"
+              variant="outlined"
+            />{" "}
+            <br />
+            <TextField
+              sx={{
+                "& label.Mui-focused": {
+                  color: "#f54a00",
+                },
+                "& .MuiOutlinedInput-root": {
+                  "&:hover fieldset": {
+                    borderColor: "gray",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#f54a00",
+                  },
+                },
+              }}
+              label="Mot de passe*"
+              type={showPassword ? "text" : "password"}
+              variant="outlined"
+              autoComplete="current-password"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      edge="end"
+                      sx={{ color: "#b6b4b3ff" }}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Box>
+        </div>
       </div>
       <div className="flex justify-center mt-7">
         <Button
@@ -63,8 +122,9 @@ const Login = () => {
             paddingBottom: "10px",
             backgroundColor: "#f54a00",
           }}
+          onClick={handleConnect}
         >
-          Continue
+          Se connecter
         </Button>
       </div>
       <div className="flex justify-center mt-2">
@@ -144,12 +204,17 @@ const Login = () => {
       </div>
       <div className="text-[14px] flex justify-center mt-5">
         <span className="text-center w-1/3">
-            Si besoin d'aide, merci de vous référer au Centre d'Assistance ou de contacter notre service client.
+          Si besoin d'aide, merci de vous référer au Centre d'Assistance ou de
+          contacter notre service client.
         </span>
       </div>
-     <div className="flex justify-center mt-10 pb-10">
-        <img src={logo} alt="logo" width="150px"/>
-    </div> 
+      <div className="flex justify-center mt-10 pb-10">
+        <img src={logo} alt="logo" width="150px" />
+      </div>
+
+      {showProgressionBar && (
+        <div className="fixed inset-0 bg-gray-500/30 z-50 flex items-center justify-center"></div>
+      )}
     </div>
   );
 };
