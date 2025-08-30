@@ -16,7 +16,7 @@ export default function Home() {
         
       >
         <div className="flex justify-between w-[1180px] mt-5">
-          <aside className="w-[200px] h-[400px] bg-gray-200 border-gray-200 rounded">
+          <aside className="w-[200px] h-[400px] bg-white border-gray-200 rounded">
             <Categories/>
           </aside>
           <div className="w-[700px] h-[400px] border-none rounded bg-gray-800">

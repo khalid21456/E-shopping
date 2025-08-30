@@ -8,6 +8,7 @@ import {
 import HomePage from "./Home/homePage";
 import Login from "./login/login";
 import Inscrire from "./signup/inscrire";
+import StorePage from "./marche/storePage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/e-shop" element={<HomePage/>} />
         <Route path="/login" element={<Login/>} />
         <Route path="/sign" element={<Inscrire/>} />
+        <Route path="/store" element={<StorePage/>} />
       </Routes>
     </Router>
   );
