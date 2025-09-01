@@ -16,6 +16,9 @@ export default function Inscrire() {
 
   const handleConnect = async () => {
     setShowProgressionBar(true);
+    setTimeout(() => {
+      navigate("/verify");
+    }, 3000)
   };
 
   return (

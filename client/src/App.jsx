@@ -9,6 +9,7 @@ import HomePage from "./Home/homePage";
 import Login from "./login/login";
 import Inscrire from "./signup/inscrire";
 import StorePage from "./marche/storePage";
+import Verification from "./signup/verification";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/login" element={<Login/>} />
         <Route path="/sign" element={<Inscrire/>} />
         <Route path="/store" element={<StorePage/>} />
+        <Route path="verify" element={<Verification/>} />
       </Routes>
     </Router>
   );

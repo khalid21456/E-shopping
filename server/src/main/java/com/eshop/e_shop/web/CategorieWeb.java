@@ -26,6 +26,4 @@ public class CategorieWeb {
     public List<Categories> getCategorie() {
         return categorieRepo.findAll();
     }
-
-
 }

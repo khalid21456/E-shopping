@@ -72,7 +72,7 @@ export default function Categories() {
         {elems.map((item, index) => (
           <div key={index} className="flex justif-left text-[12px] hover:text-orange-500 transition-colors text-gray-700 p-2 cursor-pointer">
             {item.logo}
-            <div className="ml-1" key={index}>
+            <div className="ml-1 mt-[2px]" key={index}>
               {item.item}
             </div>
           </div>

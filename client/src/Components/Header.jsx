@@ -87,6 +87,7 @@ export default function Header() {
           height="100px"
           style={{ marginRight: "100px", cursor: "pointer" }}
           alt="logo"
+          onClick={(e) => navigate("/e-shop")}
         />
         <div className="flex mr-9">
           <div className="flex items-center bg-white rounded border border-gray-200 h-12 w-[500px] mt-3 overflow-hidden hover:shadow-xl transition-shadow ">
@@ -117,7 +118,7 @@ export default function Header() {
         </div>
         <div id="aide">
           <div className="relative group">
-            <button className="flex items-center px-4 py-2 mt-3 font-bold text-gray-700 bg-white rounded cursor-pointer transition-colors duration-200 hover:text-orange-500 hover:bg-gray-100 focus:outline-none">
+            <button className="flex items-center px-4 py-2 mt-3 font-bold text-gray-700 bg-white rounded cursor-pointer transition-colors duration-200 hover:text-orange-500 focus:outline-none">
               <IoMdHelpCircleOutline
                 style={{ fontSize: "30px", marginRight: "5px" }}
               />
