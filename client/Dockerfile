@@ -1,17 +1,9 @@
-FROM jenkins/jenkins:2.452.1-jdk11 
+# Build stage
+FROM node:20
 
-USER root
-RUN apt-get update && apt-get install -y lsb-release python3-pip
-RUN curl -fsSLo /usr/share/keyrings/docker-archive-keyring.asc \
-  https://download.docker.com/linux/debian/gpg
-RUN echo "deb [arch=$(dpkg --print-architecture) \
-  signed-by=/usr/share/keyrings/docker-archive-keyring.asc] \
-  https://download.docker.com/linux/debian \
-  $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
-RUN apt-get update && apt-get install -y docker-ce-cli
-
-# 🔹 Install plugins while root
-RUN jenkins-plugin-cli --plugins "blueocean:1.25.3 docker-workflow:1.28"
-
-# 🔹 Switch back to jenkins user afterwards
-USER jenkins
+WORKDIR /src
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 5173
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

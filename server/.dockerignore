@@ -1,0 +1,27 @@
+# Ignore build output
+target/
+*.class
+
+# Ignore IDE files
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# Git files
+.git/
+.gitignore
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Maven wrapper files (optional if not needed in Docker build)
+mvnw
+mvnw.cmd
