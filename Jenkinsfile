@@ -1,51 +1,36 @@
-pipeline {
-    agent any
-    // tools {
-    //     jdk 'JDK17'
-    // }
-    environment {
-        BACKEND_DIR = "server"
-        FRONTEND_DIR = "client"
-        DOCKER_IMAGE_BACK = "khalidedaoudi/eshop-back"
-        DOCKER_IMAGE_FRONT = "khalidedaoudi/eshop-front"
-    }
+node {
+    // Define environment variables
+    def BACKEND_DIR = "server"
+    def FRONTEND_DIR = "client"
+    def DOCKER_IMAGE_BACK = "khalidedaoudi/eshop-back"
+    def DOCKER_IMAGE_FRONT = "khalidedaoudi/eshop-front"
 
-    stages {
+    try {
         stage('Checkout') {
-            steps {
-                git branch: 'main',
-                    url: 'https://github.com/khalid21456/E-shopping.git/'
-            }
+            git branch: 'main', url: 'https://github.com/khalid21456/E-shopping.git/'
         }
 
         stage('Build Backend') {
-            steps {
-                dir("${BACKEND_DIR}") {
-                    
-                    docker.image('maven:3.9.3-eclipse-temurin-17').inside {
-                        sh "chmod +x mvnw"
-                sh "./mvnw test"
-            }
+            dir(BACKEND_DIR) {
+                docker.image('maven:3.9.3-eclipse-temurin-17').inside {
+                    sh "chmod +x mvnw"
+                    sh "./mvnw clean package -DskipTests"
                 }
             }
         }
 
         stage('Test Backend') {
-            steps {
-                dir("${BACKEND_DIR}") {
-                    
+            dir(BACKEND_DIR) {
+                docker.image('maven:3.9.3-eclipse-temurin-17').inside {
+                    sh "chmod +x mvnw"
                     sh "./mvnw test"
-                    docker.image('maven:3.9.3-eclipse-temurin-17').inside {
-                        sh "chmod +x mvnw"
-                sh "./mvnw test"
-            }
                 }
             }
         }
 
         stage('Build Frontend') {
-            steps {
-                dir("${FRONTEND_DIR}") {
+            dir(FRONTEND_DIR) {
+                docker.image('node:20').inside {
                     sh "npm install"
                     sh "npm run build"
                 }
@@ -53,38 +38,36 @@ pipeline {
         }
 
         stage('Test Frontend') {
-            steps {
-                dir("${FRONTEND_DIR}") {
+            dir(FRONTEND_DIR) {
+                docker.image('node:20').inside {
                     sh "npm test -- --watchAll=false"
                 }
             }
         }
 
         stage('Docker Build & Push') {
-            steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'antik') {
-                        sh "docker build -t ${DOCKER_IMAGE_BACK}:latest ${BACKEND_DIR}"
-                        sh "docker push ${DOCKER_IMAGE_BACK}:latest"
+            docker.withRegistry('https://registry.hub.docker.com', 'antik') {
+                sh "docker build -t ${DOCKER_IMAGE_BACK}:latest ${BACKEND_DIR}"
+                sh "docker push ${DOCKER_IMAGE_BACK}:latest"
 
-                        sh "docker build -t ${DOCKER_IMAGE_FRONT}:latest ${FRONTEND_DIR}"
-                        sh "docker push ${DOCKER_IMAGE_FRONT}:latest"
-                    }
-                }
+                sh "docker build -t ${DOCKER_IMAGE_FRONT}:latest ${FRONTEND_DIR}"
+                sh "docker push ${DOCKER_IMAGE_FRONT}:latest"
             }
         }
 
         // stage('Deploy') {
-        //     steps {
-        //         sshagent(['server-ssh-credentials-id']) {
-        //             sh """
-        //                 ssh user@your-server "
-        //                 docker pull ${DOCKER_IMAGE_BACK}:latest &&
-        //                 docker pull ${DOCKER_IMAGE_FRONT}:latest &&
-        //                 docker-compose -f /path/to/docker-compose.yml up -d"
-        //             """
-        //         }
+        //     sshagent(['server-ssh-credentials-id']) {
+        //         sh """
+        //             ssh user@your-server "
+        //             docker pull ${DOCKER_IMAGE_BACK}:latest &&
+        //             docker pull ${DOCKER_IMAGE_FRONT}:latest &&
+        //             docker-compose -f /path/to/docker-compose.yml up -d"
+        //         """
         //     }
         // }
+
+    } catch (err) {
+        currentBuild.result = 'FAILURE'
+        throw err
     }
 }
