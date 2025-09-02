@@ -1,8 +1,6 @@
 pipeline {
     agent any
-    // tools {
-    //     jdk 'JDK17'
-    // }
+
     environment {
         BACKEND_DIR = "server"
         FRONTEND_DIR = "client"
@@ -21,12 +19,8 @@ pipeline {
         stage('Build Backend') {
             steps {
                 dir("${BACKEND_DIR}") {
-                    script {
-                        docker.image('maven:3.9.3-eclipse-temurin-17').inside {
-                            sh "chmod +x mvnw"
-                            sh "./mvnw clean package -DskipTests"
-                        }
-                    }
+                    sh "chmod +x mvnw"
+                    sh "./mvnw clean package -DskipTests"
                 }
             }
         }
@@ -34,12 +28,8 @@ pipeline {
         stage('Test Backend') {
             steps {
                 dir("${BACKEND_DIR}") {
-                    script {
-                        docker.image('maven:3.9.3-eclipse-temurin-17').inside {
-                             sh "chmod +x mvnw"
-                            sh "./mvnw test"
-                        }
-                    }
+                    sh "chmod +x mvnw"
+                    sh "./mvnw test"
                 }
             }
         }
