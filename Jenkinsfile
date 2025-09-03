@@ -13,9 +13,16 @@ pipeline {
     stages {
         stage('Check Java') {
             steps {
-                sh 'java -version'
-                sh 'javac -version'
-                sh 'echo $JAVA_HOME'
+    sh '''
+  ls -la /usr/lib/jvm/
+  echo "Looking for Java 17..."
+  if [ -d "/usr/lib/jvm/java-17-openjdk-amd64" ]; then
+    echo "Java 17 directory exists"
+  else
+    echo "ERROR: Java 17 NOT found!"
+    exit 1
+  fi
+'''
             }
         }
         
