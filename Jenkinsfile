@@ -20,23 +20,23 @@ pipeline {
             }
         }
 
-        // stage('Build Backend') {
-        //     steps {
-        //         dir("${BACKEND_DIR}") {
-        //             sh "chmod +x mvnw"
-        //             sh "./mvnw clean package -DskipTests"
-        //         }
-        //     }
-        // }
+        stage('Build Backend') {
+            steps {
+                dir("${BACKEND_DIR}") {
+                    sh "chmod +x mvnw"
+                    sh "./mvnw clean package -DskipTests"
+                }
+            }
+        }
 
-        // stage('Test Backend') {
-        //     steps {
-        //         dir("${BACKEND_DIR}") {
-        //             sh "chmod +x mvnw"
-        //             sh "./mvnw test"
-        //         }
-        //     }
-        // }
+        stage('Test Backend') {
+            steps {
+                dir("${BACKEND_DIR}") {
+                    sh "chmod +x mvnw"
+                    sh "./mvnw test"
+                }
+            }
+        }
 
         stage('Build Frontend') {
             steps {
