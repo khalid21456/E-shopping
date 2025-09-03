@@ -1,8 +1,7 @@
 pipeline {
     agent any
     tools {
-        jdk 'JDK17'  // matches the name in Jenkins tools
-        maven 'MavenLatest'
+        jdk 'JDK17'
     }
     environment {
         BACKEND_DIR = "server"
