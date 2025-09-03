@@ -1,13 +1,15 @@
 pipeline {
     agent any
-    tools {
-        jdk 'JDK17'
-    }
+    // tools {
+    //     jdk 'JDK17'
+    // }
     environment {
         BACKEND_DIR = "server"
         FRONTEND_DIR = "client"
         DOCKER_IMAGE_BACK = "khalidedaoudi/eshop-back"
         DOCKER_IMAGE_FRONT = "khalidedaoudi/eshop-front"
+        JAVA_HOME = "/usr/lib/jvm/java-17-openjdk-amd64"
+        PATH = "${env.JAVA_HOME}/bin:${env.PATH}"
     }
 
     stages {
