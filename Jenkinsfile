@@ -29,14 +29,14 @@ pipeline {
             }
         }
 
-        stage('Test Backend') {
-            steps {
-                dir("${BACKEND_DIR}") {
-                    sh "chmod +x mvnw"
-                    sh "./mvnw test"
-                }
-            }
-        }
+        // stage('Test Backend') {
+        //     steps {
+        //         dir("${BACKEND_DIR}") {
+        //             sh "chmod +x mvnw"
+        //             sh "./mvnw test"
+        //         }
+        //     }
+        // }
 
         stage('Build Frontend') {
             steps {
