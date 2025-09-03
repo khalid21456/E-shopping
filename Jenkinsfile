@@ -16,7 +16,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/khalid21456/E-shopping.git'
+                    url: 'https://github.com/khalid21456/E-shopping.git/'
             }
         }
 
