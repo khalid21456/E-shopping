@@ -13,16 +13,25 @@ pipeline {
     stages {
         stage('Check Java') {
             steps {
-    sh '''
-  ls -la /usr/lib/jvm/
-  echo "Looking for Java 17..."
-  if [ -d "/usr/lib/jvm/java-17-openjdk-amd64" ]; then
-    echo "Java 17 directory exists"
-  else
-    echo "ERROR: Java 17 NOT found!"
-    exit 1
-  fi
-'''
+   sh '''
+          echo "=== Which java? ==="
+          which java
+
+          echo "=== Java version ==="
+          java -version
+
+          echo "=== Real path of java ==="
+          readlink -f $(which java)
+
+          echo "=== Search for JVM directories ==="
+          find /usr -name "*jdk*" -type d 2>/dev/null | head -20
+          find /opt -name "*jdk*" -type d 2>/dev/null | head -10
+          find /home -name "*jdk*" -type d 2>/dev/null | head -10
+
+          echo "=== Print ENV ==="
+          env | grep -i java
+          env | grep -i home
+        '''
             }
         }
         
