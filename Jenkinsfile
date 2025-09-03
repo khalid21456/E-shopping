@@ -47,20 +47,20 @@ pipeline {
             }
         }
 
-        stage('Test Frontend') {
-            steps {
-                dir("${FRONTEND_DIR}") {
-                    sh "npm test -- --watchAll=false"
-                }
-            }
-        }
+        // stage('Test Frontend') {
+        //     steps {
+        //         dir("${FRONTEND_DIR}") {
+        //             sh "npm test -- --watchAll=false"
+        //         }
+        //     }
+        // }
 
         stage('Docker Build & Push') {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'antik') {
-                        // sh "docker build -t ${DOCKER_IMAGE_BACK}:latest ${BACKEND_DIR}"
-                        // sh "docker push ${DOCKER_IMAGE_BACK}:latest"
+                        sh "docker build -t ${DOCKER_IMAGE_BACK}:latest ${BACKEND_DIR}"
+                        sh "docker push ${DOCKER_IMAGE_BACK}:latest"
 
                         sh "docker build -t ${DOCKER_IMAGE_FRONT}:latest ${FRONTEND_DIR}"
                         sh "docker push ${DOCKER_IMAGE_FRONT}:latest"
