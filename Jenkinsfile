@@ -13,30 +13,6 @@ pipeline {
     }
 
     stages {
-        stage('Check Java') {
-            steps {
-   sh '''
-          echo "=== Which java? ==="
-          which java
-
-          echo "=== Java version ==="
-          java -version
-
-          echo "=== Real path of java ==="
-          readlink -f $(which java)
-
-          echo "=== Search for JVM directories ==="
-          find /usr -name "*jdk*" -type d 2>/dev/null | head -20
-          find /opt -name "*jdk*" -type d 2>/dev/null | head -10
-          find /home -name "*jdk*" -type d 2>/dev/null | head -10
-
-          echo "=== Print ENV ==="
-          env | grep -i java
-          env | grep -i home
-        '''
-            }
-        }
-        
         stage('Checkout') {
             steps {
                 git branch: 'main',
@@ -44,23 +20,23 @@ pipeline {
             }
         }
 
-        stage('Build Backend') {
-            steps {
-                dir("${BACKEND_DIR}") {
-                    sh "chmod +x mvnw"
-                    sh "./mvnw clean package -DskipTests"
-                }
-            }
-        }
+        // stage('Build Backend') {
+        //     steps {
+        //         dir("${BACKEND_DIR}") {
+        //             sh "chmod +x mvnw"
+        //             sh "./mvnw clean package -DskipTests"
+        //         }
+        //     }
+        // }
 
-        stage('Test Backend') {
-            steps {
-                dir("${BACKEND_DIR}") {
-                    sh "chmod +x mvnw"
-                    sh "./mvnw test"
-                }
-            }
-        }
+        // stage('Test Backend') {
+        //     steps {
+        //         dir("${BACKEND_DIR}") {
+        //             sh "chmod +x mvnw"
+        //             sh "./mvnw test"
+        //         }
+        //     }
+        // }
 
         stage('Build Frontend') {
             steps {
@@ -83,8 +59,8 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'antik') {
-                        sh "docker build -t ${DOCKER_IMAGE_BACK}:latest ${BACKEND_DIR}"
-                        sh "docker push ${DOCKER_IMAGE_BACK}:latest"
+                        // sh "docker build -t ${DOCKER_IMAGE_BACK}:latest ${BACKEND_DIR}"
+                        // sh "docker push ${DOCKER_IMAGE_BACK}:latest"
 
                         sh "docker build -t ${DOCKER_IMAGE_FRONT}:latest ${FRONTEND_DIR}"
                         sh "docker push ${DOCKER_IMAGE_FRONT}:latest"
