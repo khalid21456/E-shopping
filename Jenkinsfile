@@ -12,6 +12,14 @@ pipeline {
     }
 
     stages {
+        stage('Check Java') {
+            steps {
+                sh 'java -version'
+                sh 'javac -version'
+                sh 'echo $JAVA_HOME'
+            }
+        }
+        
         stage('Checkout') {
             steps {
                 git branch: 'main',
