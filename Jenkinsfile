@@ -66,16 +66,19 @@ pipeline {
             steps{
                 script{
                     docker.withRegistry('', 'antik') {
-                        def imageName = "eshop-back"
-                        def buildTag = "${imageName}:${BUILD_NUMBER}"
-                        def latestTag = "${imageName}:latest"  // Define latest tag
-                        
-                        sh "docker build -t ${imageName} -f server/Dockerfile"
-                        sh "docker tag ${imageName} khalidedaoudi/${buildTag}"
-                        sh "docker tag ${imageName} khalidedaoudi/${latestTag}"  // Tag with latest
-                        sh "docker push khalidedaoudi/${buildTag}"
-                        sh "docker push khalidedaoudi/${latestTag}"  // Push latest tag
-                        env.BUILD_TAG = buildTag
+                        // def imageName = "eshop-back"
+                        // def buildTag = "${imageName}:${BUILD_NUMBER}"
+                        // def latestTag = "${imageName}:latest"  // Define latest tag
+                        def backendImage = docker.build("khalidedaoudi/eshop-back:${BUILD_NUMBER}", "server/")
+                        backendImage.push()          // push with build number tag
+                        backendImage.push("latest")  // push latest tag
+
+                        // sh "docker build -t ${imageName} -f server/Dockerfile"
+                        // sh "docker tag ${imageName} khalidedaoudi/${buildTag}"
+                        // sh "docker tag ${imageName} khalidedaoudi/${latestTag}"  // Tag with latest
+                        // sh "docker push khalidedaoudi/${buildTag}"
+                        // sh "docker push khalidedaoudi/${latestTag}"  // Push latest tag
+                        // env.BUILD_TAG = buildTag
                     }
                         
                 }
