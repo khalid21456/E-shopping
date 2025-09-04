@@ -1,14 +1,14 @@
 # E-shop
-<center>
+<div align="center">
 <img src="client/src/assets/logo.png" width="500px"/>
-</center>
+</div>
 
 
 ## Jenkins Pipeline
 
-<center>
+<div align="center">
 <img src="image.png" width="900px"/>
-</center>
+</div>
 
 ## *Pipeline Flow*
 ## 1. Code Development & Version Control
