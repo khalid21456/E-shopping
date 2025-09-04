@@ -1,12 +1,16 @@
-# E-shopping
+# E-shop
+<center>
+<img src="client/src/assets/logo.png" width="500px"/>
+</center>
+
 
 ## Jenkins Pipeline
 
 <center>
-<img src="image.png" width="700px"/>
+<img src="image.png" width="900px"/>
 </center>
 
-Pipeline Flow
+## *Pipeline Flow*
 ## 1. Code Development & Version Control
 
 A developer pushes code to GitHub, which serves as the source code repository
