@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'docker:24.0.7-cli'  // Docker CLI image
+            image 'docker:28.3.0-cli'  // Docker CLI image
             args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
