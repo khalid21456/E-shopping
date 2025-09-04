@@ -34,7 +34,7 @@ pipeline {
             steps {
                 dir("${BACKEND_DIR}") {
                     sh ''' mvn sonar:sonar \
-                        -Dsonar.host.url=http://localhost:9000/ \
+                        -Dsonar.host.url=http://sonarqube:9000/ \
                         -Dsonar.login=squ_c639b2979b8f6a1c00a4fc70c8dfafd7eaeaef3e'''
                 }
             }
