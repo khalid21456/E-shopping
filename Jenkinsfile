@@ -70,7 +70,7 @@ pipeline {
                         def buildTag = "${imageName}:${BUILD_NUMBER}"
                         def latestTag = "${imageName}:latest"  // Define latest tag
                         
-                        sh "docker build -t ${imageName} -f Dockerfile.final ."
+                        sh "docker build -t ${imageName} -f server/Dockerfile"
                         sh "docker tag ${imageName} khalidedaoudi/${buildTag}"
                         sh "docker tag ${imageName} khalidedaoudi/${latestTag}"  // Tag with latest
                         sh "docker push khalidedaoudi/${buildTag}"
