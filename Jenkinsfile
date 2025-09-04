@@ -5,7 +5,6 @@ pipeline {
         maven 'maven3'
     }
     environment {
-        DOCKER_CREDENTIALS_ID = 'antik'
         BACKEND_DIR = "server"
         FRONTEND_DIR = "client"
         DOCKER_IMAGE_BACK = "khalidedaoudi/eshop-back"
@@ -66,7 +65,7 @@ pipeline {
         stage("Docker Build & Push"){
             steps{
                 script{
-                    docker.withDockerRegistry('https://registry.hub.docker.com', "${DOCKER_CREDENTIALS_ID}") {
+                    docker.withDockerRegistry('', 'antik') {
                         def imageName = "eshop-back"
                         def buildTag = "${imageName}:${BUILD_NUMBER}"
                         def latestTag = "${imageName}:latest"  // Define latest tag
