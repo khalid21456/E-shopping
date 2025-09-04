@@ -65,7 +65,7 @@ pipeline {
         stage("Docker Build & Push"){
             steps{
                 script{
-                    docker.withDockerRegistry('', 'antik') {
+                    withDockerRegistry([credentialsId: 'antik', url: 'https://registry.hub.docker.com']) {
                         def imageName = "eshop-back"
                         def buildTag = "${imageName}:${BUILD_NUMBER}"
                         def latestTag = "${imageName}:latest"  // Define latest tag
