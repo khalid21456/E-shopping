@@ -9,14 +9,81 @@ import LinearProgress from "@mui/material/LinearProgress";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
+const HOST = import.meta.env.VITE_SERVER_HOST;
+const PORT = import.meta.env.VITE_SERVER_PORT;
 
 import "../index.css";
+import axios from "axios";
 const Login = () => {
   const navigate = useNavigate();
   const [showProgressionBar, setShowProgressionBar] = useState(false);
+  const [request, setRequest] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [fieldError, setFieldError] = useState({ email: "", password: "" });
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+  const errorTextStyle = {
+  color: "red",
+  fontSize: "12px",
+  marginTop: "4px",
+  alignSelf: "flex-start",
+  fontWeight: "bold"
+};
+const inputStyle = {
+  "& label.Mui-focused": { color: "#f54a00" },
+  "& .MuiOutlinedInput-root": {
+    "&:hover fieldset": { borderColor: "gray" },
+    "&.Mui-focused fieldset": { borderColor: "#f54a00" },
+  },
+};
   const handleConnect = async () => {
-    setShowProgressionBar(true);
+    
+    setFieldError({ email: "", password: "" });
+    setErrorMessage("");
+
+    let hasError = false;
+    if (!request.email) {
+      setFieldError((prev) => ({
+        ...prev,
+        email: "* Veuillez entrer votre e-mail.",
+      }));
+      hasError = true;
+    }
+    if(!EMAIL_REGEX.test(request.email)) {
+      setFieldError((prev) => ({
+        ...prev,
+        email: "* Email non valide.",
+      }));
+      hasError = true;
+    }
+    if (!request.password) {
+      setFieldError((prev) => ({
+        ...prev,
+        password: "* Veuillez entrer votre mot de passe.",
+      }));
+      hasError = true;
+    }
+    if (hasError) return;
+    else setShowProgressionBar(true);
+    try {
+      const res = await axios.post(
+        `http://${HOST}:${PORT}/eshop/api/auth/login`,
+        request,
+        {withCredentials: true},
+        { headers: { "Content-Type": "application/json" } }
+      );
+      if (res.status == 200) {
+        const { id, name, email } = res.data;
+        localStorage.setItem("UserId", id);
+        localStorage.setItem("UserName", name);
+        localStorage.setItem("Email", email);
+        navigate("/e-shop")
+      }
+      setShowProgressionBar(false);
+    } catch (err) {
+      console.log(err.message);
+      setShowProgressionBar(false);
+    }
   };
 
   return (
@@ -59,38 +126,19 @@ const Login = () => {
             autoComplete="off"
           >
             <TextField
-              sx={{
-                "& label.Mui-focused": {
-                  color: "#f54a00",
-                },
-                "& .MuiOutlinedInput-root": {
-                  "&:hover fieldset": {
-                    borderColor: "gray",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#f54a00",
-                  },
-                },
-              }}
+              sx={inputStyle}
+              value={request.email}
+              onChange={(e) => setRequest({ ...request, email: e.target.value })}
               id="outlined-basic"
               label="Adresse email ou numéro de téléphone*"
               variant="outlined"
             />{" "}
             <br />
+            {fieldError.email && <div style={errorTextStyle}>{fieldError.email}</div>}
             <TextField
-              sx={{
-                "& label.Mui-focused": {
-                  color: "#f54a00",
-                },
-                "& .MuiOutlinedInput-root": {
-                  "&:hover fieldset": {
-                    borderColor: "gray",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#f54a00",
-                  },
-                },
-              }}
+              sx={inputStyle}
+              value={request.password}
+              onChange={(e) => setRequest({ ...request, password: e.target.value })}
               label="Mot de passe*"
               type={showPassword ? "text" : "password"}
               variant="outlined"
@@ -109,7 +157,8 @@ const Login = () => {
                   </InputAdornment>
                 ),
               }}
-            />
+            /><br/>
+            {fieldError.password && <div style={errorTextStyle}>{fieldError.password}</div>}
           </Box>
         </div>
       </div>
