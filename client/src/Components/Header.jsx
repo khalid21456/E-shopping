@@ -113,7 +113,9 @@ export default function Header() {
             className="font-bold pt-1 pl-2"
             onClick={(e) => navigate("/login")}
           >
-            Se connecter
+            {localStorage.getItem("UserId")
+              ? localStorage.getItem("UserName")
+              : "Se connecter"}
           </span>
         </div>
         <div id="aide">
@@ -159,13 +161,15 @@ export default function Header() {
             </div>
           </div>
         </div>
-        <div
-          id="pannier"
-          className="flex mt-5 hover:text-orange-500 cursor-pointer transition-colors duration-200"
-        >
-          <GrCart style={{ fontSize: "30px" }} />
-          <span className="font-bold pt-1 pl-2">Panier</span>
-        </div>
+        {localStorage.getItem("UserId") && (
+          <div
+            id="pannier"
+            className="flex mt-5 hover:text-orange-500 cursor-pointer transition-colors duration-200"
+          >
+            <GrCart style={{ fontSize: "30px" }} />
+            <span className="font-bold pt-1 pl-2">Panier</span>
+          </div>
+        )}
       </div>
     </React.Fragment>
   );

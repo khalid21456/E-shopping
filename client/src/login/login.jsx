@@ -23,36 +23,36 @@ const Login = () => {
   const [fieldError, setFieldError] = useState({ email: "", password: "" });
   const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
   const errorTextStyle = {
-  color: "red",
-  fontSize: "12px",
-  marginTop: "4px",
-  alignSelf: "flex-start",
-  fontWeight: "bold"
-};
-const inputStyle = {
-  "& label.Mui-focused": { color: "#f54a00" },
-  "& .MuiOutlinedInput-root": {
-    "&:hover fieldset": { borderColor: "gray" },
-    "&.Mui-focused fieldset": { borderColor: "#f54a00" },
-  },
-};
+    color: "red",
+    fontSize: "12px",
+    marginTop: "4px",
+    alignSelf: "flex-start",
+    fontWeight: "bold",
+  };
+  const inputStyle = {
+    "& label.Mui-focused": { color: "#f54a00" },
+    "& .MuiOutlinedInput-root": {
+      "&:hover fieldset": { borderColor: "gray" },
+      "&.Mui-focused fieldset": { borderColor: "#f54a00" },
+    },
+  };
   const handleConnect = async () => {
-    
     setFieldError({ email: "", password: "" });
     setErrorMessage("");
 
     let hasError = false;
+
+    if (!EMAIL_REGEX.test(request.email)) {
+      setFieldError((prev) => ({
+        ...prev,
+        email: "* Email non valide.",
+      }));
+      hasError = true;
+    }
     if (!request.email) {
       setFieldError((prev) => ({
         ...prev,
         email: "* Veuillez entrer votre e-mail.",
-      }));
-      hasError = true;
-    }
-    if(!EMAIL_REGEX.test(request.email)) {
-      setFieldError((prev) => ({
-        ...prev,
-        email: "* Email non valide.",
       }));
       hasError = true;
     }
@@ -69,7 +69,7 @@ const inputStyle = {
       const res = await axios.post(
         `http://${HOST}:${PORT}/eshop/api/auth/login`,
         request,
-        {withCredentials: true},
+        { withCredentials: true },
         { headers: { "Content-Type": "application/json" } }
       );
       if (res.status == 200) {
@@ -77,12 +77,13 @@ const inputStyle = {
         localStorage.setItem("UserId", id);
         localStorage.setItem("UserName", name);
         localStorage.setItem("Email", email);
-        navigate("/e-shop")
+        navigate("/e-shop");
       }
       setShowProgressionBar(false);
     } catch (err) {
       console.log(err.message);
       setShowProgressionBar(false);
+      setErrorMessage(err.response.data.message);
     }
   };
 
@@ -128,17 +129,23 @@ const inputStyle = {
             <TextField
               sx={inputStyle}
               value={request.email}
-              onChange={(e) => setRequest({ ...request, email: e.target.value })}
+              onChange={(e) =>
+                setRequest({ ...request, email: e.target.value })
+              }
               id="outlined-basic"
               label="Adresse email ou numéro de téléphone*"
               variant="outlined"
             />{" "}
             <br />
-            {fieldError.email && <div style={errorTextStyle}>{fieldError.email}</div>}
+            {fieldError.email && (
+              <div style={errorTextStyle}>{fieldError.email}</div>
+            )}
             <TextField
               sx={inputStyle}
               value={request.password}
-              onChange={(e) => setRequest({ ...request, password: e.target.value })}
+              onChange={(e) =>
+                setRequest({ ...request, password: e.target.value })
+              }
               label="Mot de passe*"
               type={showPassword ? "text" : "password"}
               variant="outlined"
@@ -157,8 +164,12 @@ const inputStyle = {
                   </InputAdornment>
                 ),
               }}
-            /><br/>
-            {fieldError.password && <div style={errorTextStyle}>{fieldError.password}</div>}
+            />
+            <br />
+            {fieldError.password && (
+              <div style={errorTextStyle}>{fieldError.password}</div>
+            )}
+            {errorMessage && <div style={errorTextStyle}>{errorMessage}</div>}
           </Box>
         </div>
       </div>
