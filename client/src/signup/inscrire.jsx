@@ -8,17 +8,90 @@ import LinearProgress from "@mui/material/LinearProgress";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
+import axios from "axios";
 
 export default function Inscrire() {
   const navigate = useNavigate();
   const [showProgressionBar, setShowProgressionBar] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [request, setRequest] = useState({
+    email: "",
+    password: "",
+    name: "",
+  });
+  const [errorMessage, setErrorMessage] = useState("");
+  const [fieldError, setFieldError] = useState({
+    email: "",
+    password: "",
+    name: "",
+  });
+  const HOST = import.meta.env.VITE_SERVER_HOST;
+  const PORT = import.meta.env.VITE_SERVER_PORT;
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+  const errorTextStyle = {
+    color: "red",
+    fontSize: "12px",
+    marginTop: "4px",
+    alignSelf: "flex-start",
+    fontWeight: "bold",
+  };
+  const inputStyle = {
+    "& label.Mui-focused": { color: "#f54a00" },
+    "& .MuiOutlinedInput-root": {
+      "&:hover fieldset": { borderColor: "gray" },
+      "&.Mui-focused fieldset": { borderColor: "#f54a00" },
+    },
+  };
 
   const handleConnect = async () => {
-    setShowProgressionBar(true);
-    setTimeout(() => {
-      navigate("/verify");
-    }, 3000)
+    setFieldError({ email: "", password: "", name: "" });
+    setErrorMessage("");
+
+    let hasError = false;
+
+    if (!EMAIL_REGEX.test(request.email)) {
+      setFieldError((prev) => ({
+        ...prev,
+        email: "* Email non valide.",
+      }));
+      hasError = true;
+    }
+    if (!request.email) {
+      setFieldError((prev) => ({
+        ...prev,
+        email: "* Veuillez entrer votre e-mail.",
+      }));
+      hasError = true;
+    }
+    if (!request.name) {
+      setFieldError((prev) => ({
+        ...prev,
+        name: "* Veuillez entrer votre nom complet.",
+      }));
+      hasError = true;
+    }
+    if (!request.password) {
+      setFieldError((prev) => ({
+        ...prev,
+        password: "* Veuillez entrer votre mot de passe.",
+      }));
+      hasError = true;
+    }
+    if (hasError) return;
+    else setShowProgressionBar(true);
+    try {
+      const res = await axios.post(
+        `http://${HOST}:${PORT}/api/auth/signup`,
+        request,
+      );
+      if (res.status === 200) {
+        navigate("/verify");
+      }
+    } catch (err) {
+      console.log(err.message);
+      setShowProgressionBar(false);
+      setErrorMessage(err.response.data.message);
+    }
   };
 
   return (
@@ -58,59 +131,39 @@ export default function Inscrire() {
             autoComplete="off"
           >
             <TextField
-              sx={{
-                "& label.Mui-focused": {
-                  color: "#f54a00",
-                },
-                "& .MuiOutlinedInput-root": {
-                  "&:hover fieldset": {
-                    borderColor: "gray",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#f54a00",
-                  },
-                },
-              }}
+              sx={inputStyle}
               id="outlined-basic"
+              value={request.name}
+              onChange={(e) => setRequest({ ...request, name: e.target.value })}
               label="Nom et prénom*"
               variant="outlined"
             />{" "}
             <br />
+            {fieldError.name && (
+              <div style={errorTextStyle}>{fieldError.name}</div>
+            )}
             <TextField
-              sx={{
-                "& label.Mui-focused": {
-                  color: "#f54a00",
-                },
-                "& .MuiOutlinedInput-root": {
-                  "&:hover fieldset": {
-                    borderColor: "gray",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#f54a00",
-                  },
-                },
-              }}
+              sx={inputStyle}
               id="outlined-basic"
+              value={request.email}
+              onChange={(e) =>
+                setRequest({ ...request, email: e.target.value })
+              }
               label="Adresse email ou numéro de téléphone*"
               variant="outlined"
             />
             <br />
+            {fieldError.email && (
+              <div style={errorTextStyle}>{fieldError.email}</div>
+            )}
             <TextField
-              sx={{
-                "& label.Mui-focused": {
-                  color: "#f54a00",
-                },
-                "& .MuiOutlinedInput-root": {
-                  "&:hover fieldset": {
-                    borderColor: "gray",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#f54a00",
-                  },
-                },
-              }}
+              sx={inputStyle}
               label="Mot de passe*"
               type={showPassword ? "text" : "password"}
+              value={request.password}
+              onChange={(e) =>
+                setRequest({ ...request, password: e.target.value })
+              }
               variant="outlined"
               autoComplete="current-password"
               InputProps={{
@@ -128,7 +181,12 @@ export default function Inscrire() {
                 ),
               }}
             />
+            <br />
+            {fieldError.password && (
+              <div style={errorTextStyle}>{fieldError.password}</div>
+            )}
           </Box>
+          {errorMessage && <div style={errorTextStyle}>{errorMessage}</div>}
         </div>
       </div>
       <div className="flex justify-center mt-7">

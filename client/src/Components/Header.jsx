@@ -84,12 +84,12 @@ export default function Header() {
         </div>
         <img
           src={logo}
-          height="100px"
+          className="h-16"
           style={{ marginRight: "100px", cursor: "pointer" }}
           alt="logo"
           onClick={(e) => navigate("/e-shop")}
         />
-        <div className="flex mr-9">
+        <div className="flex mr-9 mb-2">
           <div className="flex items-center bg-white rounded border border-gray-200 h-12 w-[500px] mt-3 overflow-hidden hover:shadow-xl transition-shadow ">
             <div className="pl-4 pr-3">
               <Search className="h-5 w-5 text-gray-400" />
