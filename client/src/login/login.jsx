@@ -73,10 +73,11 @@ const Login = () => {
         { headers: { "Content-Type": "application/json" } }
       );
       if (res.status == 200) {
-        const { id, name, email } = res.data;
+        const { id, name, email, token } = res.data;
         localStorage.setItem("UserId", id);
         localStorage.setItem("UserName", name);
         localStorage.setItem("Email", email);
+        localStorage.setItem("token",token)
         navigate("/e-shop");
       }
       setShowProgressionBar(false);

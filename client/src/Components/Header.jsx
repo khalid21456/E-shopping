@@ -7,10 +7,52 @@ import { GrCart } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
 import { MdMenu } from "react-icons/md";
 import Categories from "./Categories";
+import axios from "axios";
 
 export default function Header() {
   const [isSticky, setIsSticky] = useState(false);
   const navigate = useNavigate();
+  const HOST = import.meta.env.VITE_SERVER_HOST;
+  const PORT = import.meta.env.VITE_SERVER_PORT;
+
+  const verifyToken = async () => {
+    
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.post(
+        `http://${HOST}:${PORT}/api/auth/verify-token`,
+        { token },
+         {// config object (un seul objet pour toutes les options)
+        withCredentials: true,
+        headers: { 
+          "Content-Type": "application/json"
+        }
+      }
+      );
+
+      if (res.data.valid) {
+        console.log("✅ Token valid for user:", res.data.username);
+        navigate("/profile");
+      } else {
+        console.log("❌ Token invalid");
+        navigate("/login");
+      }
+    } catch (err) {
+      console.error("❌ Verification failed", err);
+      navigate("/login");
+    }
+  };
+
+  const seconnect = async () => {
+    try {
+      await axios.get(`http://${HOST}:${PORT}/api/profile/data`, {
+        withCredentials: true,
+      });
+      navigate("/profile");
+    } catch {
+      navigate("/login");
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -109,10 +151,7 @@ export default function Header() {
           className="flex mt-5 hover:text-orange-500 cursor-pointer transition-colors duration-200"
         >
           <IoPersonOutline style={{ fontSize: "30px" }} />
-          <span
-            className="font-bold pt-1 pl-2"
-            onClick={(e) => navigate("/login")}
-          >
+          <span className="font-bold pt-1 pl-2" onClick={verifyToken}>
             {localStorage.getItem("UserId")
               ? localStorage.getItem("UserName")
               : "Se connecter"}

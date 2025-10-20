@@ -1,17 +1,15 @@
 package com.eshop.e_shop.web;
 
-import com.eshop.e_shop.domain.DTO.LoginRequest;
-import com.eshop.e_shop.domain.DTO.PendingUser;
-import com.eshop.e_shop.domain.DTO.SignUpRequest;
+import com.eshop.e_shop.domain.DTO.*;
 import com.eshop.e_shop.domain.models.Client;
 import com.eshop.e_shop.repositories.ClientRepo;
+import com.eshop.e_shop.services.EmailService;
 import io.github.cdimascio.dotenv.Dotenv;
+import io.jsonwebtoken.Claims;
 import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,21 +23,20 @@ import java.util.*;
 @SuppressWarnings("unused")
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class AuthController {
 
     private final ClientRepo clientRepo;
     private final PasswordEncoder passwordEncoder;
     private final String jwtSecret;
-    private final JavaMailSender javaMailSender;
     private final Map<String, PendingUser> pendingUsers = new HashMap<>();
+    private final EmailService authService;
 
-
-    public AuthController(ClientRepo clientRepo, PasswordEncoder passwordEncoder, JavaMailSender mailSender) {
+    public AuthController(ClientRepo clientRepo, PasswordEncoder passwordEncoder, EmailService authService) {
         this.clientRepo = clientRepo;
         this.passwordEncoder = passwordEncoder;
         Dotenv dotenv = Dotenv.load();
-        this.javaMailSender = mailSender;
+        this.authService = authService;
         this.jwtSecret = dotenv.get("SECRET_KEY");
     }
     @PostMapping("/login")
@@ -76,11 +73,13 @@ public class AuthController {
                 .body(Map.of(
                         "id", client.getId(),
                         "name", client.getName(),
-                        "email", client.getEmail()
+                        "email", client.getEmail(),
+                        "token" , token
                 ));
     }
 
-    private ResponseEntity<?> SignUp(@RequestBody SignUpRequest request) throws MessagingException {
+    @PostMapping("/signup")
+    public ResponseEntity<?> SignUp(@RequestBody SignUpRequest request) throws MessagingException {
         if (clientRepo.findByEmail(request.getEmail()).isPresent()) {
             return ResponseEntity.status(400)
                     .body(Map.of("message", "Email already registered"));
@@ -95,7 +94,8 @@ public class AuthController {
                         passwordEncoder.encode(request.getPassword()),
                         code
                 ));
-        sendVerificationEmail(request.getEmail(), code);
+        System.out.println(request.getEmail());
+        authService.sendVerificationEmail(request.getEmail(), code);
 
         return ResponseEntity.ok(Map.of("message", "Verification code sent to email"));
     }
@@ -141,13 +141,24 @@ public class AuthController {
                 .body(Map.of("id", client.getId(), "name", client.getName(), "email", client.getEmail()));
     }
 
-    private void sendVerificationEmail(String to, String code) throws MessagingException {
-        MimeMessage message = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setTo(to);
-        helper.setSubject("E-Shop Signup Verification Code");
-        helper.setText("Your verification code is: " + code, true);
-        javaMailSender.send(message);
+    @PostMapping("/verify-token")
+    public ResponseEntity<?> verifyToken(@RequestBody TokenRequest tokenRequest) {
+        try {
+            // Parse and validate JWT
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(jwtSecret)
+                    .build()
+                    .parseClaimsJws(tokenRequest.getToken())
+                    .getBody();
+
+            // If valid, return decoded user info
+            return ResponseEntity.ok(new TokenResponse(true, "Token is valid", claims.getSubject()));
+
+        } catch (Exception e) {
+            // Invalid, expired, or tampered token
+            return ResponseEntity.status(401).body(new TokenResponse(false, "Invalid or expired token", null));
+        }
     }
+
 
 }

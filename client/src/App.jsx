@@ -10,6 +10,7 @@ import Login from "./login/login";
 import Inscrire from "./signup/inscrire";
 import StorePage from "./marche/storePage";
 import Verification from "./signup/verification";
+import Profile from "./profile/profile"
 import "./index.css"
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/sign" element={<Inscrire/>} />
         <Route path="/store" element={<StorePage/>} />
         <Route path="verify" element={<Verification/>} />
+        <Route path="/profile" element={<Profile/>} />
       </Routes>
     </Router>
   );

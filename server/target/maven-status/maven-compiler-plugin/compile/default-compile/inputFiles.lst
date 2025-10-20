@@ -1,0 +1,17 @@
+C:\Users\KHALID\Desktop\e-commerce\E-shop\server\src\main\java\com\eshop\e_shop\config\CorsConfig.java
+C:\Users\KHALID\Desktop\e-commerce\E-shop\server\src\main\java\com\eshop\e_shop\config\JwtConfig.java
+C:\Users\KHALID\Desktop\e-commerce\E-shop\server\src\main\java\com\eshop\e_shop\domain\DTO\LoginRequest.java
+C:\Users\KHALID\Desktop\e-commerce\E-shop\server\src\main\java\com\eshop\e_shop\domain\DTO\PendingUser.java
+C:\Users\KHALID\Desktop\e-commerce\E-shop\server\src\main\java\com\eshop\e_shop\domain\DTO\SignUpRequest.java
+C:\Users\KHALID\Desktop\e-commerce\E-shop\server\src\main\java\com\eshop\e_shop\domain\models\Categories.java
+C:\Users\KHALID\Desktop\e-commerce\E-shop\server\src\main\java\com\eshop\e_shop\domain\models\Client.java
+C:\Users\KHALID\Desktop\e-commerce\E-shop\server\src\main\java\com\eshop\e_shop\domain\models\Vendeur.java
+C:\Users\KHALID\Desktop\e-commerce\E-shop\server\src\main\java\com\eshop\e_shop\EShopApplication.java
+C:\Users\KHALID\Desktop\e-commerce\E-shop\server\src\main\java\com\eshop\e_shop\filters\ClientFilter.java
+C:\Users\KHALID\Desktop\e-commerce\E-shop\server\src\main\java\com\eshop\e_shop\repositories\CategorieRepo.java
+C:\Users\KHALID\Desktop\e-commerce\E-shop\server\src\main\java\com\eshop\e_shop\repositories\ClientRepo.java
+C:\Users\KHALID\Desktop\e-commerce\E-shop\server\src\main\java\com\eshop\e_shop\security\SecurityConfig.java
+C:\Users\KHALID\Desktop\e-commerce\E-shop\server\src\main\java\com\eshop\e_shop\security\UserConfig.java
+C:\Users\KHALID\Desktop\e-commerce\E-shop\server\src\main\java\com\eshop\e_shop\services\EmailService.java
+C:\Users\KHALID\Desktop\e-commerce\E-shop\server\src\main\java\com\eshop\e_shop\web\AuthController.java
+C:\Users\KHALID\Desktop\e-commerce\E-shop\server\src\main\java\com\eshop\e_shop\web\CategorieWeb.java
